@@ -6,37 +6,93 @@
 
 .evolution-outer-container {
     display: flex;
-    width: 10rem;
-    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+    border: 2px solid #2a2a2a;
+    padding: 5px 6px;
+    background: #d8d8d0;
+    box-shadow: 2px 2px 0 #2a2a2a;
 }
 
-.tips-container {
-    width: 100%;
+/* name + stage row */
+.name-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
 }
 
-.evolution-container {
-    width: 100%;
-}
-
-.evolution-outer-container .title {
-    width: 100%;
-    text-align: center;
-    padding-bottom: 5px;
-    font-family: 'visitor';
-    color: #474141;
+.title {
+    font-family: 'visitor', monospace;
+    font-size: 14px;
+    color: #2a2a2a;
     font-weight: normal;
+    letter-spacing: 1px;
+    line-height: 1;
+}
+
+.stage-badge {
+    font-family: 'visitor', monospace;
+    font-size: 9px;
+    color: #555555;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* exp bar row */
+.exp-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.exp-label {
+    font-family: 'visitor', monospace;
+    font-size: 10px;
+    color: #2a2a2a;
+    flex-shrink: 0;
 }
 
 .hp-inner-container {
-    height: 15px;
-    width: 100%;
-    border: 2px solid #545454;
-    border-radius: 8px;
+    flex: 1;
+    height: 8px;
+    border: 2px solid #2a2a2a;
+    background: #e8e8e0;
 }
 
 .hp-indicator {
     display: block;
-    height: inherit;
-    width: 10%;
-    background: #67b622;
+    height: 100%;
+    background: #555555;
+    transition: width 0.4s steps(10);
+}
+
+.exp-pct {
+    font-family: 'visitor', monospace;
+    font-size: 10px;
+    color: #2a2a2a;
+    flex-shrink: 0;
+    min-width: 28px;
+    text-align: right;
+}
+
+/* time row */
+.time-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+}
+
+.time-val {
+    font-family: 'visitor', monospace;
+    font-size: 11px;
+    color: #2a2a2a;
+    letter-spacing: 1px;
+}
+
+.time-sep {
+    font-family: 'visitor', monospace;
+    font-size: 11px;
+    color: #777777;
 }

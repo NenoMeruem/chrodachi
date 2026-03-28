@@ -8,6 +8,9 @@ chrome.action.setBadgeBackgroundColor({ 'color': "#f6d7b1" });
 
 chrome.runtime.onInstalled.addListener(() => {
   chrome.alarms.create({periodInMinutes: 1.0})
+  GetMonster().then((rs: MonsterModel) => {
+    MonsterFactory(rs).then(monster => SetMonster(monster))
+  })
 });
 
 chrome.alarms.onAlarm.addListener(() => {

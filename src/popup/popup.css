@@ -1,9 +1,13 @@
 @font-face {
   font-family: 'visitor';
-  src: url('/public/fonts/visitor.ttf') format("truetype");
+  src: url('../../public/fonts/visitor.ttf') format("truetype");
 }
 
 body {
-  width: 10rem;
-  height: 8rem;
+  width: 220px;
+  height: 195px;
+  background: #e8e8e0;
+  margin: 0;
+  padding: 0;
+  image-rendering: pixelated;
 }

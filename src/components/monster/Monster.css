@@ -1,35 +1,56 @@
 /* animation */
 .animation-container {
-    margin-top: 10px;
     width: 100%;
-    height: 5rem;
-  }
-  
-  .animated-gif {
+    flex: 1;
+    position: relative;
+    border: 2px solid #2a2a2a;
+    box-shadow: 2px 2px 0 #2a2a2a;
+    overflow: hidden;
+    /* sky */
+    background: #e8e8e0;
+}
+
+/* ground strip */
+.animation-container::after {
+    content: '';
     position: absolute;
-    animation: moving 14s linear infinite
-  }
-  
-  @keyframes moving {
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 20px;
+    background: #aaaaaa;
+    border-top: 2px solid #2a2a2a;
+}
+
+.animated-gif {
+    position: absolute;
+    bottom: 18px;
+    height: 48px;
+    image-rendering: pixelated;
+    animation: moving 14s linear infinite;
+    z-index: 1;
+}
+
+@keyframes moving {
     0%,
     100% {
-      left: 0rem;
-      transform: scaleX(-1);
+        left: 4px;
+        transform: scaleX(-1);
     }
-  
+
     49.9% {
-      left: 8rem;
-      transform: scaleX(-1);
+        left: calc(100% - 52px);
+        transform: scaleX(-1);
     }
-  
+
     50% {
-      left: 8rem;
-      transform: scaleX(1);
+        left: calc(100% - 52px);
+        transform: scaleX(1);
     }
-  
+
     99.9% {
-      left: 0rem;
-      transform: scaleX(1);
+        left: 4px;
+        transform: scaleX(1);
     }
-  }
+}
   
