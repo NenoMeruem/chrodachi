@@ -11,13 +11,12 @@ function App() {
     const [monster, setMonster] = useState(new MonsterModel())
     const [gameState, setGameState] = useState(new GameStateModel())
 
-    const refresh = async () => {
-        const [m, g] = await Promise.all([GetMonster(), GetGameState()])
-        setMonster(m)
-        setGameState(g)
-    };
-
     useEffect(() => {
+        const refresh = async () => {
+            const [m, g] = await Promise.all([GetMonster(), GetGameState()])
+            setMonster(m)
+            setGameState(g)
+        }
         refresh();
         const interval = setInterval(refresh, 60000);
         return () => clearInterval(interval);

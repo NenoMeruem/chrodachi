@@ -9,6 +9,7 @@ function Progress(props: any) {
     const [expText, setExpText] = useState('0:00')
     const [targetText, setTargetText] = useState('0:00')
     const [stage, setStage] = useState('')
+    const [streak, setStreak] = useState(0)
 
     useEffect(() => {
         const monster = props?.monster
@@ -27,9 +28,9 @@ function Progress(props: any) {
         } else {
             setExpBar(100)
         }
-    }, [props, props?.monster])
 
-    const streak = props?.streak ?? 0
+        setStreak(props?.streak ?? 0)
+    }, [props, props?.monster, props?.streak])
 
     return (
         <div className="header">
