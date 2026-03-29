@@ -53,4 +53,16 @@
         transform: scaleX(1);
     }
 }
-  
+
+/* bounce on click */
+.animated-gif.bounce {
+    animation: moving 14s linear infinite, bounce 0.4s steps(4) 1;
+}
+
+@keyframes bounce {
+    0%   { transform: translateY(0) scaleX(var(--flip, 1)); }
+    25%  { transform: translateY(-12px) scaleX(var(--flip, 1)); }
+    50%  { transform: translateY(-6px) scaleX(var(--flip, 1)); }
+    75%  { transform: translateY(-10px) scaleX(var(--flip, 1)); }
+    100% { transform: translateY(0) scaleX(var(--flip, 1)); }
+}
