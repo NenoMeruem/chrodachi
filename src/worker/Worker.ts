@@ -59,7 +59,7 @@ function UpdateBadge(monster: MonsterModel) {
 
 function NotifyEvolution(monster: MonsterModel) {
     const stage = Constants.TypeMonster[monster.Type] ?? ''
-    chrome.notifications.create({
+    chrome.notifications.create('chrodachi-evolution', {
         type: 'basic',
         iconUrl: `assets/browser-action/action-38.png`,
         title: 'Chrodachi tiến hóa!',

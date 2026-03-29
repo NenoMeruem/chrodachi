@@ -22,7 +22,7 @@ export function GetMonster(monster: MonsterModel, id: string): Promise<MonsterMo
 export function UpdateMonster(monster: MonsterModel): Promise<UpdateResult> {
     if (monster.Exp < monster.Target || monster.Evolutions.length === 0)
         return Promise.resolve({ monster, evolved: false })
-    return EvoMonster(monster).then(evolved => ({ monster: evolved, evolved: true }))
+    return EvoMonster(monster).then(evolvedMonster => ({ monster: evolvedMonster, evolved: true }))
 }
 
 function InitBabyMonster(): Promise<MonsterModel> {
