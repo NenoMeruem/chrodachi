@@ -96,3 +96,24 @@
     font-size: 11px;
     color: #777777;
 }
+
+/* streak */
+.streak-row {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    margin-top: 1px;
+}
+
+.streak-icon {
+    font-size: 10px;
+    color: #ffaa00;
+    line-height: 1;
+}
+
+.streak-val {
+    font-family: 'visitor', monospace;
+    font-size: 10px;
+    color: #555555;
+    letter-spacing: 0.5px;
+}

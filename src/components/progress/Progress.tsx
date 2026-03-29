@@ -29,6 +29,8 @@ function Progress(props: any) {
         }
     }, [props, props?.monster])
 
+    const streak = props?.streak ?? 0
+
     return (
         <div className="header">
             <div className="evolution-outer-container">
@@ -47,6 +49,10 @@ function Progress(props: any) {
                     <span className="time-val">{expText}</span>
                     <span className="time-sep">/</span>
                     <span className="time-val">{targetText}</span>
+                </div>
+                <div className="streak-row">
+                    <span className="streak-icon">★</span>
+                    <span className="streak-val">{streak} day streak</span>
                 </div>
             </div>
         </div>
