@@ -16,7 +16,7 @@ function History(props: { entries: MonsterHistoryEntry[] }) {
     return (
         <div className="history-container">
             {entries.map((e, i) => (
-                <div className="history-entry" key={i}>
+                <div className="history-entry" key={`${e.Id}-${e.DateRetired}`}>
                     <img
                         className="history-img"
                         src={`/assets/monsters/${Constants.TypeMonster[e.Type]}/${e.Name}.gif`}

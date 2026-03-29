@@ -24,7 +24,7 @@ chrome.alarms.onAlarm.addListener(() => {
 
     Promise.all([GetMonster(), GetGameState()]).then(([rs, gameState]) => {
         const isNewDay = rs.Id !== '' &&
-            new Date(rs.DateOfBirth).getUTCDate() !== new Date().getUTCDate()
+            new Date(rs.DateOfBirth).toISOString().slice(0, 10) !== new Date(now).toISOString().slice(0, 10)
 
         MonsterFactory(rs).then(monster => {
             // Save retired monster to history if new day spawned a new baby
