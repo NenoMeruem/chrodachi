@@ -7,8 +7,9 @@
         "19": "assets/browser-action/action-19.png",
         "38": "assets/browser-action/action-38.png"
     },
-    "action": {
-        "default_popup": "popup.html"
+    "action": {},
+    "side_panel": {
+        "default_path": "popup.html"
     },
     "background": {
         "service_worker": "service.js",
@@ -18,6 +19,7 @@
         "storage",
         "alarms",
         "notifications",
-        "system.memory"
+        "system.memory",
+        "sidePanel"
     ]
 }

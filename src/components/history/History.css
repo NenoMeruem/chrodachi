@@ -2,6 +2,7 @@
 .history-container {
   width: 100%;
   flex: 1;
+  min-height: 200px;
   background: #e8e4de;
   border-radius: 6px;
   border: 1px solid #c8c4be;

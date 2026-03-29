@@ -1,13 +1,13 @@
 /* container */
 .container {
-  width: 370px;
-  height: 430px;
+  width: 100%;
+  min-height: 100vh;
   margin: 0;
-  padding: 10px;
+  padding: 14px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   background: #f0ede8;
 }
 

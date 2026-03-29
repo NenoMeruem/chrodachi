@@ -1,7 +1,8 @@
 /* monster scene */
 .animation-container {
   width: 100%;
-  flex: 1;
+  height: 160px;
+  flex-shrink: 0;
   position: relative;
   border-radius: 6px;
   overflow: hidden;
@@ -26,7 +27,7 @@
 .animated-gif {
   position: absolute;
   bottom: 20px;
-  height: 48px;
+  height: 72px;
   image-rendering: pixelated;
   animation: moving 14s linear infinite;
   z-index: 1;

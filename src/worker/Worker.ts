@@ -13,6 +13,14 @@ const AUTO_RESET_MS = 7_200_000       // 2 hours at max stage before auto-reset
 chrome.action.setBadgeText({ text: '0:00' })
 chrome.action.setBadgeBackgroundColor({ color: '#aaaaaa' })
 
+chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true })
+
+chrome.action.onClicked.addListener((tab) => {
+    if (tab.id !== undefined) {
+        chrome.sidePanel.open({ tabId: tab.id })
+    }
+})
+
 chrome.runtime.onInstalled.addListener(() => {
     chrome.alarms.create({ periodInMinutes: 1.0 })
     GetMonster().then((rs: MonsterModel) => {
