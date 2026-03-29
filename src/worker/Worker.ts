@@ -1,4 +1,5 @@
 import MonsterModel from '../models/MonsterModel'
+import GameStateModel from '../models/GameStateModel'
 import { MonsterFactory, UpdateMonster } from '../service/MonsterService'
 import { FormatDuration } from '../utils/Helper'
 import { GetMonster, SetMonster } from '../utils/Storage'
@@ -38,10 +39,10 @@ chrome.alarms.onAlarm.addListener(() => {
             monster.Exp = now - new Date(monster.DateOfBirth).getTime()
 
             UpdateMonster(monster).then(updated => {
+                UpdateStreak(gameState, now)   // mutates gameState first
                 SetMonster(updated)
-                SetGameState(gameState)
+                SetGameState(gameState)        // single write with all mutations
                 UpdateBadge(updated)
-                UpdateStreak(gameState, now)
             })
         })
     })
@@ -53,7 +54,7 @@ function UpdateBadge(monster: MonsterModel) {
     chrome.action.setBadgeBackgroundColor({ color })
 }
 
-function UpdateStreak(gameState: any, now: number) {
+function UpdateStreak(gameState: GameStateModel, now: number) {
     const todayUTC = new Date(now).toISOString().slice(0, 10)
     if (gameState.LastActiveDate === todayUTC) return
 
@@ -64,5 +65,5 @@ function UpdateStreak(gameState: any, now: number) {
         gameState.Streak = 1
     }
     gameState.LastActiveDate = todayUTC
-    SetGameState(gameState)
+    // No SetGameState here — caller saves once with all mutations
 }
