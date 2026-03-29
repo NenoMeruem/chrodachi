@@ -11,6 +11,7 @@ class GameStateModel {
     Streak: number = 0                  // số ngày liên tiếp
     LastActiveDate: string = ''         // 'YYYY-MM-DD' UTC
     History: MonsterHistoryEntry[] = [] // danh sách monster đã qua
+    MaxStageReachedAt: number = 0      // timestamp khi đạt max stage, để auto-reset
 }
 
 export default GameStateModel

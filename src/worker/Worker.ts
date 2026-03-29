@@ -1,6 +1,6 @@
 import MonsterModel from '../models/MonsterModel'
 import GameStateModel from '../models/GameStateModel'
-import { MonsterFactory, UpdateMonster } from '../service/MonsterService'
+import { MonsterFactory, UpdateMonster, InitBabyMonster } from '../service/MonsterService'
 import { FormatDuration } from '../utils/Helper'
 import { GetMonster, SetMonster } from '../utils/Storage'
 import { GetGameState, SetGameState } from '../utils/GameStateStorage'
@@ -8,6 +8,7 @@ import { Constants } from '../utils/Constants'
 
 const DECAY_THRESHOLD_MS = 7_200_000  // 2 hours inactive
 const MIN_EXP_MS = 60_000             // minimum 1 minute EXP
+const AUTO_RESET_MS = 7_200_000       // 2 hours at max stage before auto-reset
 
 chrome.action.setBadgeText({ text: '0:00' })
 chrome.action.setBadgeBackgroundColor({ color: '#aaaaaa' })
@@ -52,6 +53,34 @@ chrome.alarms.onAlarm.addListener(() => {
 
             monster.Exp = now - new Date(monster.DateOfBirth).getTime()
 
+            // Track max stage for auto-reset
+            const isMaxStage = monster.Evolutions.length === 0 && monster.Target === -1
+            if (isMaxStage) {
+                if (gameState.MaxStageReachedAt === 0) {
+                    gameState.MaxStageReachedAt = now
+                } else if (now - gameState.MaxStageReachedAt > AUTO_RESET_MS) {
+                    // Auto-reset: retire current monster and spawn new baby
+                    RetireMonster(monster, gameState, now)
+                    gameState.MaxStageReachedAt = 0
+                    InitBabyMonster().then(baby => {
+                        UpdateStreak(gameState, now)
+                        SetMonster(baby)
+                        SetGameState(gameState)
+                        UpdateBadge(baby)
+                        chrome.notifications.create('chrodachi-reset', {
+                            type: 'basic',
+                            iconUrl: 'assets/browser-action/action-38.png',
+                            title: 'Chrodachi mới!',
+                            message: `${monster.Name} đã nghỉ hưu. Baby mới đã xuất hiện!`,
+                            priority: 1,
+                        })
+                    })
+                    return
+                }
+            } else {
+                gameState.MaxStageReachedAt = 0
+            }
+
             UpdateMonster(monster).then(({ monster: updated, evolved }) => {
                 // Save pre-evolution monster to history
                 if (evolved && monster.Name !== updated.Name) {
@@ -89,6 +118,17 @@ function NotifyEvolution(monster: MonsterModel) {
         title: 'Chrodachi tiến hóa!',
         message: `${monster.Name} (${stage}) đã xuất hiện!`,
         priority: 1,
+    })
+}
+
+function RetireMonster(monster: MonsterModel, gameState: GameStateModel, now: number) {
+    if (!monster.Name) return
+    gameState.History.push({
+        Id: monster.Id,
+        Name: monster.Name,
+        Type: monster.Type,
+        DateOfBirth: monster.DateOfBirth,
+        DateRetired: new Date(now).toUTCString(),
     })
 }
 

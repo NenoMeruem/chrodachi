@@ -17,6 +17,7 @@
     "permissions": [
         "storage",
         "alarms",
-        "notifications"
+        "notifications",
+        "system.memory"
     ]
 }

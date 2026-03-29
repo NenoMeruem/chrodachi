@@ -8,6 +8,8 @@ function Progress(props: any) {
     const [expBar, setExpBar] = useState(0)
     const [expText, setExpText] = useState('0:00')
     const [targetText, setTargetText] = useState('0:00')
+    const [isMax, setIsMax] = useState(false)
+    const ram = props?.ram ?? null
     const [stage, setStage] = useState('')
     const [streak, setStreak] = useState(0)
 
@@ -19,8 +21,10 @@ function Progress(props: any) {
         const target = monster?.Target ?? 1
         const type = monster?.Type ?? 0
 
+        const maxStage = target === -1
+        setIsMax(maxStage)
         setExpText(FormatDuration(exp))
-        setTargetText(target > 0 ? FormatDuration(target) : '???')
+        setTargetText(maxStage ? 'MAX' : FormatDuration(target))
         setStage(Constants.TypeMonster[type] ?? '')
 
         if (target > 0) {
@@ -47,13 +51,23 @@ function Progress(props: any) {
                     <span className="exp-pct">{expBar}%</span>
                 </div>
                 <div className="time-row">
+                    <span className="time-label">AGE</span>
                     <span className="time-val">{expText}</span>
-                    <span className="time-sep">/</span>
-                    <span className="time-val">{targetText}</span>
+                    <span className="time-sep">→</span>
+                    <span className={`time-label${isMax ? ' time-label-max' : ''}`}>EVO</span>
+                    <span className={`time-val${isMax ? ' time-val-max' : ''}`}>{targetText}</span>
                 </div>
-                <div className="streak-row">
-                    <span className="streak-icon">★</span>
-                    <span className="streak-val">{streak} day streak</span>
+                <div className="status-row">
+                    <div className="streak-row">
+                        <span className="streak-icon">★</span>
+                        <span className="streak-val">{streak} day streak</span>
+                    </div>
+                    {ram && (
+                        <div className="ram-chip">
+                            <span className={`ram-chip-dot ${ram.pct < 60 ? 'ok' : ram.pct < 80 ? 'warn' : 'high'}`}></span>
+                            <span className="ram-chip-text">{ram.used}/{ram.total}G</span>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

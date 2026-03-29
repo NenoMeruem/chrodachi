@@ -4,9 +4,9 @@
 }
 
 body {
-  width: 220px;
-  height: 220px;
-  background: #e8e8e0;
+  width: 300px;
+  height: 360px;
+  background: #f0ede8;
   margin: 0;
   padding: 0;
   image-rendering: pixelated;

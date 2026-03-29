@@ -25,7 +25,7 @@ export function UpdateMonster(monster: MonsterModel): Promise<UpdateResult> {
     return EvoMonster(monster).then(evolvedMonster => ({ monster: evolvedMonster, evolved: true }))
 }
 
-function InitBabyMonster(): Promise<MonsterModel> {
+export function InitBabyMonster(): Promise<MonsterModel> {
     let monster = Database.monsters.find(x => x.Type === 0) as MonsterModel
     monster.DateOfBirth = new Date().toUTCString();
     return Promise.resolve(monster)

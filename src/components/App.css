@@ -1,34 +1,54 @@
 /* container */
 .container {
-  width: 220px;
-  height: 220px;
+  width: 300px;
+  height: 360px;
   margin: 0;
   padding: 10px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  gap: 8px;
+  background: #f0ede8;
+}
+
+/* bottom action row */
+.action-row {
+  display: flex;
   gap: 6px;
-  background: #e8e8e0;
-  border: 3px solid #2a2a2a;
+  width: 100%;
+}
+
+.history-toggle,
+.release-btn {
+  flex: 1;
+  background: #e4e0da;
+  border: 1px solid #c8c4be;
+  border-radius: 4px;
   font-family: 'visitor', monospace;
+  font-size: 9px;
+  color: #666058;
+  padding: 5px 0;
+  cursor: pointer;
+  letter-spacing: 1px;
+  text-align: center;
 }
 
-/* history toggle button */
-.history-toggle {
-    width: 100%;
-    background: #d8d8d0;
-    border: 2px solid #2a2a2a;
-    box-shadow: 2px 2px 0 #2a2a2a;
-    font-family: 'visitor', monospace;
-    font-size: 10px;
-    color: #2a2a2a;
-    padding: 3px 0;
-    cursor: pointer;
-    letter-spacing: 1px;
-    text-align: center;
+.history-toggle:hover {
+  background: #d8d4ce;
+  color: #2a2520;
 }
 
-.history-toggle:active {
-    box-shadow: none;
-    transform: translate(2px, 2px);
+.release-btn {
+  color: #aa4422;
+  border-color: #d4b0a0;
+}
+
+.release-btn:hover {
+  background: #f0d8d0;
+  color: #cc3300;
+}
+
+.history-toggle:active,
+.release-btn:active {
+  opacity: 0.7;
 }
