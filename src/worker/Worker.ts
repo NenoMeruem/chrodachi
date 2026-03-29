@@ -1,31 +1,68 @@
-import MonsterModel from "../models/MonsterModel";
-import { MonsterFactory, UpdateMonster } from "../service/MonsterService";
-import { FormatDuration } from "../utils/Helper";
-import { GetMonster, SetMonster } from "../utils/Storage";
+import MonsterModel from '../models/MonsterModel'
+import { MonsterFactory, UpdateMonster } from '../service/MonsterService'
+import { FormatDuration } from '../utils/Helper'
+import { GetMonster, SetMonster } from '../utils/Storage'
+import { GetGameState, SetGameState } from '../utils/GameStateStorage'
 import { Constants } from '../utils/Constants'
 
-chrome.action.setBadgeText({ 'text': '0:00' });
+const DECAY_THRESHOLD_MS = 7_200_000  // 2 hours inactive
+const MIN_EXP_MS = 60_000             // minimum 1 minute EXP
+
+chrome.action.setBadgeText({ text: '0:00' })
+chrome.action.setBadgeBackgroundColor({ color: '#aaaaaa' })
 
 chrome.runtime.onInstalled.addListener(() => {
-  chrome.alarms.create({periodInMinutes: 1.0})
-  GetMonster().then((rs: MonsterModel) => {
-    MonsterFactory(rs).then(monster => SetMonster(monster))
-  })
-});
+    chrome.alarms.create({ periodInMinutes: 1.0 })
+    GetMonster().then((rs: MonsterModel) => {
+        MonsterFactory(rs).then(monster => SetMonster(monster))
+    })
+})
 
 chrome.alarms.onAlarm.addListener(() => {
-  GetMonster().then((rs: MonsterModel) => {
-    MonsterFactory(rs).then(monster => {
-      monster.Exp = new Date().getTime() - new Date(monster.DateOfBirth).getTime()
-      UpdateMonster(monster)
-        .then(monster => SetMonster(monster)
-          .then(rs => UpdateBadge(rs)))
-    });
-  });
+    const now = Date.now()
+
+    Promise.all([GetMonster(), GetGameState()]).then(([rs, gameState]) => {
+        MonsterFactory(rs).then(monster => {
+            // Decay: if inactive > threshold, advance DateOfBirth (reduces effective Exp)
+            if (gameState.LastAlarmTime > 0) {
+                const gap = now - gameState.LastAlarmTime
+                if (gap > DECAY_THRESHOLD_MS) {
+                    const penalty = gap - DECAY_THRESHOLD_MS
+                    const dob = new Date(monster.DateOfBirth).getTime()
+                    const maxDob = now - MIN_EXP_MS
+                    monster.DateOfBirth = new Date(Math.min(dob + penalty, maxDob)).toUTCString()
+                }
+            }
+            gameState.LastAlarmTime = now
+
+            monster.Exp = now - new Date(monster.DateOfBirth).getTime()
+
+            UpdateMonster(monster).then(updated => {
+                SetMonster(updated)
+                SetGameState(gameState)
+                UpdateBadge(updated)
+                UpdateStreak(gameState, now)
+            })
+        })
+    })
 })
 
 function UpdateBadge(monster: MonsterModel) {
     chrome.action.setBadgeText({ text: FormatDuration(monster.Exp) })
     const color = Constants.BadgeColor[monster.Type] ?? '#aaaaaa'
     chrome.action.setBadgeBackgroundColor({ color })
+}
+
+function UpdateStreak(gameState: any, now: number) {
+    const todayUTC = new Date(now).toISOString().slice(0, 10)
+    if (gameState.LastActiveDate === todayUTC) return
+
+    const yesterday = new Date(now - 86_400_000).toISOString().slice(0, 10)
+    if (gameState.LastActiveDate === yesterday) {
+        gameState.Streak += 1
+    } else {
+        gameState.Streak = 1
+    }
+    gameState.LastActiveDate = todayUTC
+    SetGameState(gameState)
 }
