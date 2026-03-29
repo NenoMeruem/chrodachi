@@ -1,6 +1,10 @@
 import Database from '../data/database.json'
 import MonsterModel from '../models/MonsterModel';
 
+export interface UpdateResult {
+    monster: MonsterModel
+    evolved: boolean
+}
 
 export function MonsterFactory(monster: MonsterModel): Promise<MonsterModel> {
     if (new Date(monster.DateOfBirth).getUTCDate() !== new Date().getUTCDate() || monster.Id === '' || monster.Id === null)
@@ -15,10 +19,10 @@ export function GetMonster(monster: MonsterModel, id: string): Promise<MonsterMo
     return Promise.resolve(m)
 }
 
-export function UpdateMonster(monster: MonsterModel): Promise<MonsterModel> {
+export function UpdateMonster(monster: MonsterModel): Promise<UpdateResult> {
     if (monster.Exp < monster.Target || monster.Evolutions.length === 0)
-        return Promise.resolve(monster)
-    return EvoMonster(monster)
+        return Promise.resolve({ monster, evolved: false })
+    return EvoMonster(monster).then(evolved => ({ monster: evolved, evolved: true }))
 }
 
 function InitBabyMonster(): Promise<MonsterModel> {

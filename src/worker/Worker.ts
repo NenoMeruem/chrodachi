@@ -38,11 +38,14 @@ chrome.alarms.onAlarm.addListener(() => {
 
             monster.Exp = now - new Date(monster.DateOfBirth).getTime()
 
-            UpdateMonster(monster).then(updated => {
+            UpdateMonster(monster).then(({ monster: updated, evolved }) => {
                 UpdateStreak(gameState, now)   // mutates gameState first
                 SetMonster(updated)
                 SetGameState(gameState)        // single write with all mutations
                 UpdateBadge(updated)
+                if (evolved) {
+                    NotifyEvolution(updated)
+                }
             })
         })
     })
@@ -52,6 +55,17 @@ function UpdateBadge(monster: MonsterModel) {
     chrome.action.setBadgeText({ text: FormatDuration(monster.Exp) })
     const color = Constants.BadgeColor[monster.Type] ?? '#aaaaaa'
     chrome.action.setBadgeBackgroundColor({ color })
+}
+
+function NotifyEvolution(monster: MonsterModel) {
+    const stage = Constants.TypeMonster[monster.Type] ?? ''
+    chrome.notifications.create({
+        type: 'basic',
+        iconUrl: `assets/browser-action/action-38.png`,
+        title: 'Chrodachi tiến hóa!',
+        message: `${monster.Name} (${stage}) đã xuất hiện!`,
+        priority: 1,
+    })
 }
 
 function UpdateStreak(gameState: GameStateModel, now: number) {
