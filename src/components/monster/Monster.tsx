@@ -1,11 +1,11 @@
-// src/components/monster/Monster.tsx
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import './Monster.css'
 import { Constants } from '../../utils/Constants'
 
 function Monster(props: any) {
     const [sourceImg, setSourceImg] = useState('')
     const [bouncing, setBouncing] = useState(false)
+    const bounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
     useEffect(() => {
         let type = Number.parseInt(props?.monster?.Type)
@@ -14,10 +14,18 @@ function Monster(props: any) {
     }, [props, props?.monster])
 
     const handleClick = useCallback(() => {
-        if (bouncing) return
-        setBouncing(true)
-        setTimeout(() => setBouncing(false), 400)
-    }, [bouncing])
+        setBouncing(prev => {
+            if (prev) return prev
+            bounceTimer.current = setTimeout(() => setBouncing(false), 400)
+            return true
+        })
+    }, [])
+
+    useEffect(() => {
+        return () => {
+            if (bounceTimer.current) clearTimeout(bounceTimer.current)
+        }
+    }, [])
 
     return (
         <div className="animation-container" onClick={handleClick}>
