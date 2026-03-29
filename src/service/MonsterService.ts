@@ -7,7 +7,7 @@ export interface UpdateResult {
 }
 
 export function MonsterFactory(monster: MonsterModel): Promise<MonsterModel> {
-    if (new Date(monster.DateOfBirth).getUTCDate() !== new Date().getUTCDate() || monster.Id === '' || monster.Id === null)
+    if (new Date(monster.DateOfBirth).toISOString().slice(0, 10) !== new Date().toISOString().slice(0, 10) || monster.Id === '' || monster.Id === null)
         return InitBabyMonster();
     return Promise.resolve(monster);
 }
