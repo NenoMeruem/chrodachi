@@ -23,7 +23,21 @@ chrome.alarms.onAlarm.addListener(() => {
     const now = Date.now()
 
     Promise.all([GetMonster(), GetGameState()]).then(([rs, gameState]) => {
+        const isNewDay = rs.Id !== '' &&
+            new Date(rs.DateOfBirth).getUTCDate() !== new Date().getUTCDate()
+
         MonsterFactory(rs).then(monster => {
+            // Save retired monster to history if new day spawned a new baby
+            if (isNewDay && rs.Name) {
+                gameState.History.push({
+                    Id: rs.Id,
+                    Name: rs.Name,
+                    Type: rs.Type,
+                    DateOfBirth: rs.DateOfBirth,
+                    DateRetired: new Date(now).toUTCString(),
+                })
+            }
+
             // Decay: if inactive > threshold, advance DateOfBirth (reduces effective Exp)
             if (gameState.LastAlarmTime > 0) {
                 const gap = now - gameState.LastAlarmTime
@@ -39,9 +53,19 @@ chrome.alarms.onAlarm.addListener(() => {
             monster.Exp = now - new Date(monster.DateOfBirth).getTime()
 
             UpdateMonster(monster).then(({ monster: updated, evolved }) => {
-                UpdateStreak(gameState, now)   // mutates gameState first
+                // Save pre-evolution monster to history
+                if (evolved && monster.Name !== updated.Name) {
+                    gameState.History.push({
+                        Id: monster.Id,
+                        Name: monster.Name,
+                        Type: monster.Type,
+                        DateOfBirth: monster.DateOfBirth,
+                        DateRetired: new Date(now).toUTCString(),
+                    })
+                }
+                UpdateStreak(gameState, now)
                 SetMonster(updated)
-                SetGameState(gameState)        // single write with all mutations
+                SetGameState(gameState)
                 UpdateBadge(updated)
                 if (evolved) {
                     NotifyEvolution(updated)

@@ -1,0 +1,62 @@
+/* history panel */
+.history-container {
+    width: 100%;
+    flex: 1;
+    border: 2px solid #2a2a2a;
+    box-shadow: 2px 2px 0 #2a2a2a;
+    background: #d8d8d0;
+    overflow-y: auto;
+    padding: 4px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.history-empty {
+    font-family: 'visitor', monospace;
+    font-size: 11px;
+    color: #777777;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.history-entry {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border-bottom: 1px solid #aaaaaa;
+    padding-bottom: 3px;
+}
+
+.history-img {
+    width: 28px;
+    height: 28px;
+    image-rendering: pixelated;
+    object-fit: contain;
+}
+
+.history-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.history-name {
+    font-family: 'visitor', monospace;
+    font-size: 11px;
+    color: #2a2a2a;
+}
+
+.history-stage {
+    font-family: 'visitor', monospace;
+    font-size: 9px;
+    color: #555555;
+    text-transform: uppercase;
+}
+
+.history-date {
+    font-family: 'visitor', monospace;
+    font-size: 8px;
+    color: #888888;
+}

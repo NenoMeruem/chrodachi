@@ -12,3 +12,23 @@
   border: 3px solid #2a2a2a;
   font-family: 'visitor', monospace;
 }
+
+/* history toggle button */
+.history-toggle {
+    width: 100%;
+    background: #d8d8d0;
+    border: 2px solid #2a2a2a;
+    box-shadow: 2px 2px 0 #2a2a2a;
+    font-family: 'visitor', monospace;
+    font-size: 10px;
+    color: #2a2a2a;
+    padding: 3px 0;
+    cursor: pointer;
+    letter-spacing: 1px;
+    text-align: center;
+}
+
+.history-toggle:active {
+    box-shadow: none;
+    transform: translate(2px, 2px);
+}
